@@ -135,14 +135,21 @@ async function resolveWindowIdForBackgroundTab(): Promise<number | undefined> {
 		});
 		if (typeof lastFocused.id === "number") return lastFocused.id;
 	} catch {
-		// Fall through to all windows lookup.
+		// Fall through to a tabs-based normal window lookup.
 	}
 
-	const windows = await browser.windows.getAll({
-		populate: false,
-		windowTypes: ["normal"],
-	});
-	return windows.find((window) => typeof window.id === "number")?.id;
+	try {
+		const [activeTab] = await browser.tabs.query({
+			active: true,
+			windowType: "normal",
+		});
+		return typeof activeTab?.windowId === "number"
+			? activeTab.windowId
+			: undefined;
+	} catch {
+		// Window targeting is optional; let tabs.create choose the window.
+		return undefined;
+	}
 }
 
 function isChromeErrorUrl(url: string | undefined): boolean {
