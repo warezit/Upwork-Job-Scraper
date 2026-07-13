@@ -2,7 +2,7 @@
   "name": "upwork-job-scraper",
   "description": "A Chrome extension (MV3) that automatically scrapes Upwork job listings from a saved search URL and delivers new results via browser notifications and/or a webhook.",
   "private": true,
-  "version": "3.3.2",
+  "version": "3.3.3",
   "type": "module",
   "scripts": {
     "dev": "wxt",
